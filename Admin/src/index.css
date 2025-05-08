@@ -1,0 +1,21 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Prata&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
+@import "tailwindcss";
+
+*{
+    font-family: Outfit;
+}
+button{
+    cursor: pointer;
+}
+li{
+    cursor: pointer;
+    color: inherit;
+}
+.active{
+    background-color: rgb(227, 195, 195);
+    border-color: rgb(251, 129, 129);
+}
+input,select,textarea{
+    outline: none;
+}
