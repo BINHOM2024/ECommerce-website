@@ -71,18 +71,7 @@ const StoreContext = ({ children }) => {
       }
     }
   };
-  const getUserCarts = async () => {
-    try {
-      const response = await axios.get(`${backendUrl}/api/userCart/get`, {
-        headers: { token },
-      });
-      if (response.data.success) {
-        setCartItems(response.data.cartData);
-      } else return toast.error(response.data.message);
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
+
   const getTotalCartAmount = () => {
     let totalAmount = 0;
     for (const items in cartItems) {
@@ -96,29 +85,37 @@ const StoreContext = ({ children }) => {
     return totalAmount;
   };
 
-  const getAllproducts = async () => {
-    try {
-      const response = await axios.get(`${backendUrl}/api/product/list`);
-      if (response.data.success) {
-        setProducts(response.data.products);
-      } else {
-        toast.error(response.data.message);
-      }
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
-
   useEffect(() => {
-    getAllproducts();
-  }, []);
+    const fetchInitialData = async () => {
+      try {
+        const [productsRes, cartRes] = await Promise.all([
+          axios.get(`${backendUrl}/api/product/list`),
+          token
+            ? axios.get(`${backendUrl}/api/userCart/get`, {
+                headers: { token },
+              })
+            : Promise.resolve({ data: { success: true, cartData: {} } }),
+        ]);
 
-  useEffect(() => {
-    if (token) {
-      getUserCarts();
-    }
+        if (productsRes.data.success) {
+          setProducts(productsRes.data.products);
+        } else {
+          toast.error(productsRes.data.message);
+        }
+
+        if (cartRes.data.success) {
+          setCartItems(cartRes.data.cartData);
+        } else {
+          toast.error(cartRes.data.message);
+        }
+      } catch (err) {
+        toast.error(err.message);
+      } 
+    };
+
+    fetchInitialData();
   }, [token]);
-
+  
   const value = {
     products,
     delivery_fee,
