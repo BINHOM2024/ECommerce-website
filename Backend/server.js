@@ -14,11 +14,7 @@ connect_DB();
 connectToCloudinary();
 
 app.use(express.json());
-app.use(
-  cors({
-    origin: "https://e-commerce-website-one-beige.vercel.app",
-  })
-);
+app.use(cors());
 
 app.use("/api/user", userRouter);
 app.use("/api/product", productRouter);
