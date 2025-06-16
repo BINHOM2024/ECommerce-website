@@ -21,6 +21,9 @@ app.use("/api/product", productRouter);
 app.use("/api/userCart", cartRouter);
 app.use("/api/orders", orderRouter);
 
+app.get("/", (req, res) => {
+  res.json({success:true,message:"welcome to ecommerce website"})
+})
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
